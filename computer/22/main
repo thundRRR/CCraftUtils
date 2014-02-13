@@ -1,0 +1,36 @@
+if not os.loadAPI("/gui") then
+ print("Error: GUI API not found")
+end
+dofile "/buttonClass"
+    
+local monitor = peripheral.wrap("right")
+gui.setScreen(monitor)
+gui.clearScreen()
+
+function open()
+  redstone.setOutput("bottom", false)
+  print("Open")
+end
+function close()
+  redstone.setOutput("bottom", true)
+  print("Close")
+end    
+  
+local b1 = Button.create(25, 18, 10, 5, colors.green, "Open", open)
+local b2 = Button.create(65, 18, 10, 5, colors.red, "Close", close)
+b1:draw()
+b2:draw()
+monitor.setCursorPos(39, 10)
+monitor.write("Launch Bay Door Control")
+while true do 
+  local event, p1, p2, p3 = os.pullEvent()
+  if event == "monitor_touch" then
+    b1:isClicked(p2, p3)
+    b2:isClicked(p2, p3)
+  elseif event == "key" then
+    print("Press Q to Quit")
+    if read() == "Q" or "q" then
+      break
+    end    
+  end  
+end

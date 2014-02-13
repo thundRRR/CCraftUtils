@@ -1,0 +1,37 @@
+--buttonClass.lua
+
+Button = {}
+Button.__index = Button
+
+function Button.create(x, y, width, height, color, text, activeFn)
+  local btn = {}
+  setmetatable(btn, Button)
+  btn.x = x
+  btn.y = y
+  btn.width = width
+  btn.height = height
+  btn.color = color
+  btn.text = text
+  btn.activate = activeFn
+  return btn
+end
+
+function Button:activate()
+end
+
+function Button:draw()
+  gui.fillRect(self.x, self.y, self.width, self.height, self.color)
+  gui.drawRect(self.x, self.y, self.width, self.height, colors.white)
+  gui.drawCenteredText(self.x + self.width/2 + 1/2, self.y + self.height/2, self.text, self.color)
+end
+
+function Button:isClicked(clickX, clickY)
+  if self.x <= clickX and clickX <= self.x + self.width then
+    if self.y <= clickY and clickY <= self.y + self.height then
+      self.activate()
+      redstone.setOutput("back", true)
+      sleep(.1)
+      redstone.setOutput("back", false)
+    end
+  end
+end

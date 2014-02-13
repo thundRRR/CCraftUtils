@@ -1,0 +1,64 @@
+local monitor = {}
+function setScreen(screen) --set the screen to draw to
+	if screen ~= nil then
+		monitor = screen
+  monitor.setTextScale(.5)
+	else
+		term.print("Not a valid screen")
+	end
+end	
+
+function clearScreen()
+  local w, h = monitor.getSize()
+  fillRect(1, 1, w, h, colors.black)
+end
+
+function drawCenteredText(x, y, text, color)
+  local len = string.len(text)
+  local xPos, yPos = monitor.getCursorPos()
+  monitor.setBackgroundColor(color)
+  monitor.setCursorPos(x - len/2, y)
+  monitor.write(text)
+  monitor.setCursorPos(xPos, yPos)
+  monitor.setBackgroundColor(colors.black)
+end      
+
+function drawPixel(x, y, nColor) --draws a pixel to the screen
+	if monitor == nil then
+		monitor = term
+	end
+	if nColor  ~= nil then
+		monitor.setBackgroundColor(nColor)
+	end
+	local curX, curY = monitor.getCursorPos()
+	monitor.setCursorPos(x, y)
+	monitor.write(" ")
+	monitor.setCursorPos(curX, curY) --restore cursor to previous position
+	monitor.setBackgroundColor(colors.black) --restore background color to avoid annoyance
+end
+
+function fillRect(x, y, width, height, nColor) --draws a solid rectangle starting at x,y and with specified size and color
+	if monitor == nil then
+		monitor = term
+	end
+	for i = x, x + width do
+		for j = y, y + height do
+			drawPixel(i, j, nColor)
+		end
+	end
+end
+
+function drawRect(x, y, width, height, nColor) --draws the outline of a rectangle
+	for i = x, x + width do
+		drawPixel(i, y, nColor)
+	end
+	for j = y, y + height do
+		drawPixel(x, j, nColor)
+	end
+	for i = x, x + width do
+		drawPixel(i, y + height, nColor)
+	end
+	for j = y, y + height do
+		drawPixel(x + width, j, nColor)
+  end
+end
