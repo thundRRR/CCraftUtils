@@ -1,0 +1,26 @@
+function processMessage(message)
+  local params = {}
+  for word in string.gmatch(message, "[^%s]+") do
+    table.insert(params, word)
+  end 
+  local state = false
+  if table.getn(params) ~= 2 then
+    print("Incorrect number of parameters")
+  else
+     if params[2] == "true" then
+       state = true
+     elseif params[2] == "false" then
+       state = false
+     end
+  end
+  print(params[1])
+  print(state)  
+  return params[1], state
+end
+
+rednet.open("front")
+while true do 
+  local event, id, message, distance = os.pullEvent("rednet_message")
+  local param, state = processMessage(message)
+  rs.setOutput(param, state)
+end  
