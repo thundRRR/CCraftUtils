@@ -1,0 +1,4 @@
+os.loadAPI("ocs/apis/sensor")
+local prox = sensor.wrap("left")
+print(textutils.serialize(prox.getTargets()))
+
