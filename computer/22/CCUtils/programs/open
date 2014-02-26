@@ -2,7 +2,7 @@ os.loadAPI("ocs/apis/sensor")
 
 local compPos = {x = 14, y = 73, z = -642}
 local doorPos = {x = 11, y = 69, z = -651}
-local offset = {x = doorPos.x - compPos.x, doorPos.y - compPos.y, doorPos.z - compPos.z}
+local offset = {x = doorPos.x - compPos.x, y = doorPos.y - compPos.y, z = doorPos.z - compPos.z}
 
 function distance(pos)
   local deltaX = pos.X - offset.x
@@ -10,8 +10,9 @@ function distance(pos)
   local deltaZ = pos.Z - offset.z
   return math.sqrt(deltaX*deltaX + deltaY*deltaY + deltaZ*deltaZ)
 end
-local radius = 2
 
+local radius = 2.5
+rednet.open("top")
 local prox = sensor.wrap("left")
 while true do
   local targets = prox.getTargets()
@@ -19,7 +20,7 @@ while true do
     if distance(v.Position) < radius and v.Name == "Player" then
       rednet.broadcast("left true")
       sleep(2)
-      rednet.broadcast("left false")
+      rednet.broadcast("left false")   
     end
   end
 end        
